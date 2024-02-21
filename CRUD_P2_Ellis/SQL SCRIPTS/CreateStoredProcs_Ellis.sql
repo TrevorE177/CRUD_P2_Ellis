@@ -8,17 +8,23 @@ CREATE PROCEDURE InsertCustomerAndOrder_Ellis
 @City VARCHAR(40),
 @Country VARCHAR(40),
 @Phone VARCHAR(20),
+
 @OrderDate DATETIME
 --@TotalAmount VARCHAR(40)
 
 AS
 DECLARE @CustomerId INT
-DECLARE @OrderNumber INT
-SELECT @OrderNumber = CONVERT (INT, (RAND() * (10000 - 1) + 1))
-INSERT INTO Customer (FirstName, LastName, City, Country, Phone)
 
+DECLARE @RandomOrderNumber INT
+DECLARE @OrderNumber VARCHAR(10)
+SELECT @RandomOrderNumber = CONVERT (INT, (RAND() * (10000 - 1) + 1))
+SELECT @OrderNumber = CAST(@RandomOrderNumber AS VARCHAR(5)) + '_' + LEFT(@LastName, 2)
+
+INSERT INTO Customer (FirstName, LastName, City, Country, Phone)
 VALUES (@FirstName, @LastName, @City, @Country, @Phone)
+
 SELECT @CustomerId = SCOPE_IDENTITY()
+
 INSERT INTO "Order"(CustomerId, OrderDate, OrderNumber)
 VALUES (@CustomerId, @OrderDate, @OrderNumber)
 GO;
